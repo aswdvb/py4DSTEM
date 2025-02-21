@@ -23,6 +23,25 @@ def get_bksbtr_DP(datacube, darkref, Rx, Ry):
     ), "background must have shape (datacube.Q_Nx, datacube.Q_Ny)"
     return datacube.data[Rx, Ry, :, :].astype(float) - darkref.astype(float)
 
+#### Substract darkreference from datacube ####
+
+def substract_darkreference(datacube, darkref):
+    """
+    Returns a new DataCube with the dark reference subtracted from each frame.
+    
+    Args:
+        datacube (DataCube): data to background subtract
+        darkref (ndarray): dark reference. must have shape (datacube.Q_Nx, datacube.Q_Ny)
+
+    Returns:
+        (DataCube) the background subtracted datacube
+    """
+    assert darkref.shape==(datacube.Q_Nx,datacube.Q_Ny), "background must have shape (datacube.Q_Nx, datacube.Q_Ny)"
+    for i in range(datacube.R_Nx):
+        for j in range(datacube.R_Ny):
+            datacube.data[i,j,:,:] = datacube.data[i,j,:,:] - darkref.astype(float)    
+    return datacube
+
 
 #### Get dark reference ####
 
